@@ -10,15 +10,30 @@
 <form class="card" action="{{ route('form_penghapusan.store') }}" method="POST">
     {{ csrf_field() }}
     <div class="card-body">
-        <div class="float-left">
-            <a href="{{ route('form_penghapusan.index') }}" class="btn btn-danger"><i class="fas fa-times"></i> Batal </a>
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="table" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th> Nama </th>
+                        <th >NIK</th>
+                        <th> Store </th>
+                        <th> Ajukan Penghapusan </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($userStores as $userStore)
+                        <tr>
+                            <td>{{ $userStore->user->name }}</td>
+                            <td>{{ $userStore->user->nik }}</td>
+                            <td>{{ $userStore->stores->name }}</td>
+                            <td> <a href="{{ route('form_penghapusan.create', $userStore->id) }}" class="btn btn-info">
+                                <i class="fas fa-file"></i> Buat Form </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        <div class="float-right">
-            <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true; this.value = 'Submitting the form';">
-                <i class="fas fa-save"></i> Simpan
-            </button>
-        </div>
-    </div>
     <div class="card-body">
         <table class="table table-bordered table-striped" id="table" style="width: 100%;">
             <thead>

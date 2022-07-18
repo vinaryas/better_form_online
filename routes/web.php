@@ -46,6 +46,8 @@ Route::get('/form_pembuatan', 'FormPembuatanController@index')->name('form_pembu
 Route::post('/form_pembuatan/store', 'FormPembuatanController@store')->name('form_pembuatan.store');
 
 Route::get('/form_penghapusan', 'FormPenghapusanController@index')->name('form_penghapusan.index');
+Route::get('/form_penghapusan/create/{id}', 'FormPenghapusanController@create')->name('form_penghapusan.create');
 Route::post('/form_penghapusan/store', 'FormPenghapusanController@store')->name('form_penghapusan.store');
 
-
+Route::get('/form_pemindahan', 'FormPemindahanController@index')->name('form_pemindahan.index');
+Route::post('/form_pemindahan/store', 'FormPemindahanController@store')->name('form_pemindahan.store');

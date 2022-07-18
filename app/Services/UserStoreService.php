@@ -20,7 +20,7 @@ class UserStoreService
 
     public function all()
     {
-		return $this->UserStore->query()->with('stores', 'users');
+		return $this->UserStore->query()->with('stores', 'user');
 	}
 
 	public function update($data, $id)
@@ -36,5 +36,15 @@ class UserStoreService
     public function getStoreByUserId($user_id)
     {
         return $this->UserStore->where('user_id', $user_id);
+    }
+
+    public function getuserByStoreId($store_id)
+    {
+        return $this->all()->where('store_id', $store_id);
+    }
+
+    public function getById($id)
+    {
+        return $this->UserStore->where('id', $id);
     }
 }

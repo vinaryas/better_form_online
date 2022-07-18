@@ -49,12 +49,12 @@ class AppServiceProvider extends ServiceProvider
                         'icon' => 'fas fa-file-alt',
                         'active' => ['form_penghapusan.index'],
                     ],
-            //         [
-            //             'text' => 'Pemindahan ID',
-            //             'url' => route('form-pemindahan.index'),
-            //             'icon' => 'fas fa-file-alt',
-            //             'active' => ['form-pemindahan*'],
-            //         ],
+                    [
+                        'text' => 'Pemindahan ID',
+                        'url' => route('form_pemindahan.index'),
+                        'icon' => 'fas fa-file-alt',
+                        'active' => ['form_pemindahan.index'],
+                    ],
 
                 ],
             ]);

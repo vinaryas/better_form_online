@@ -14,7 +14,7 @@
             <div class="row">
                 @foreach ( $apps as $app)
                     <div class="col-md-2">
-                        <div class="">
+                        <div>
                             <input class="form-check-inline" type="checkbox" name="aplikasi_id[]" value="{{ $app->id }}">
                             <label class="form-check-inline">{{ $app->name }}</label>
                         </div>

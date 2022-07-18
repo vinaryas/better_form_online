@@ -22,4 +22,9 @@ class FormPemindahanService
     {
         return $this->FormPemindahan->create($data);
     }
+
+    public function getByUserId($user_id)
+    {
+        return $this->FormPemindahan->where('created_by', $user_id);
+    }
 }
