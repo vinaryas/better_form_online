@@ -47,4 +47,9 @@ class UserStoreService
     {
         return $this->UserStore->where('id', $id);
     }
+
+    public function getStoreNotOwned($storeId)
+    {
+        return $this->all()->where('store_id', '!=', $storeId);
+    }
 }

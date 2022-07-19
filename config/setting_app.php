@@ -19,7 +19,6 @@ return [
         'panding' => 0,
         'approve' => 1,
         'disapprove' => 2,
-        'finish'=>3,
     ],
     'status_sync' => [
         'need_sync' => 1,

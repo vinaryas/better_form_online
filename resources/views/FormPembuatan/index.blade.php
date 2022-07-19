@@ -58,9 +58,9 @@
                 @foreach ($forms as $form)
                     <tr>
                         <td>{{ $form->id }}</td>
-                        <td>{{ $form->created_by }}</td>
-                        <td>{{ $form->store_id }}</td>
-                        <td>{{ $form->aplikasi_id }}</td>
+                        <td>{{ $form->user->name }}</td>
+                        <td>{{ $form->store->name }}</td>
+                        <td>{{ $form->aplikasi->name }}</td>
                         <td>{{ $form->status }}</td>
                     </tr>
                 @endforeach

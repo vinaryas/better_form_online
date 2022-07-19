@@ -33,4 +33,13 @@ private $ApprovalPenghapusan;
         return ($nextPosition != null) ? $nextPosition->role_id : 0;
     }
 
+    public function countApproved()
+    {
+        return $this->ApprovalPenghapusan->where('status', 'Approved');
+    }
+
+    public function countDisapproved()
+    {
+        return $this->ApprovalPenghapusan->where('status', 'Disapproved');
+    }
 }

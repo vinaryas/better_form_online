@@ -33,7 +33,7 @@
             </div>
             <div>
                 @foreach ( $apps as $app)
-                <input type="hidden" value="{{ $app->id }}" name="aplikasi_id[]" id="aplikasi_id">
+                <input type="hidden" value="{{ $app->id }}" name="aplikasi_id[]">
                 @endforeach
             </div>
         </div>

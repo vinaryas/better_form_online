@@ -26,4 +26,6 @@ class StoreService
     {
         return $this->all()->where('id', $storeId);
     }
+
+   
 }

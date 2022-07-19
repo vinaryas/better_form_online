@@ -22,7 +22,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class FormPemindahanController extends Controller
 {
     public function index(){
-        $owns = FormPembuatanService::getByUserId(Auth::user()->id)->get();
+        $owns = FormPembuatanService::getByUserIdActive(Auth::user()->id)->get();
         $forms = FormPemindahanService::getByUserId(Auth::user()->id)->get();
         $stores = StoreService::all()->get();
         $apps = AplikasiService::all()->get();
@@ -33,6 +33,7 @@ class FormPemindahanController extends Controller
     public function store(Request $request){
         DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
+        $owns = FormPembuatanService::getByUserIdActive(Auth::user()->id)->get();
 
         try {
             $index = 0;
@@ -43,19 +44,17 @@ class FormPemindahanController extends Controller
             ];
             $storeForm = FormHeadService::store($form);
 
-            foreach ($request->aplikasi_id as $aplikasi_id){
-                $user_id_aplikasi = ($aplikasi_id == config('setting_app.aplikasi_id.vega')) ? $request->id_app[$index] : null;
-                $pass = ($aplikasi_id == config('setting_app.aplikasi_id.vega') or $aplikasi_id == config('setting_app.aplikasi_id.rjserver')) ? $request->pass[$index] : null;
+            foreach ($owns as $own){
                 $nextApp = ApprovalPembuatanService::getNextApp($request->aplikasi_id[0], $roleUsers->role_id, $storeForm->region_id);
                 $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
                     $dataApp = [
-                        'aplikasi_id' => $aplikasi_id,
+                        'aplikasi_id' => $own->aplikasi_id,
                         'form_head_id' => $storeForm->id,
-                        'user_id_aplikasi'=> $user_id_aplikasi,
-                        'pass'=> $pass,
-                        'store_id' => $userStore->store_id,
+                        'user_id_aplikasi'=> $own->user_id_aplikasi,
+                        'pass'=> $own->pass,
+                        'store_id' => $request->store_id,
                         'role_last_app' => $roleUsers->role_id,
                         'role_next_app' => $nextApp,
                         'status' => config('setting_app.status_approval.panding'),
@@ -68,8 +67,8 @@ class FormPemindahanController extends Controller
                     $logForm = [
                         'nik' => Auth::user()->nik,
                         'name' => Auth::user()->name,
-                        'aplikasi_id' => $aplikasi_id,
-                        'proses' => 'pemindahan',
+                        'aplikasi_id' => $own->aplikasi_id,
+                        'proses' => 'pembuatan',
                         'store_id' =>  $userStore->store_id,
                         'reason' => 'pemindahan',
                         'created_at' => now(),
@@ -80,15 +79,15 @@ class FormPemindahanController extends Controller
                 $index++;
             }
 
-            foreach ($request->aplikasi_id as $aplikasi_id){
+            foreach ($owns as $own){
                 $nextApp = ApprovalPenghapusanService::getNextApp($request->aplikasi_id[0], $roleUsers->role_id, $storeForm->region_id);
                 $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
                     $dataApp = [
-                        'aplikasi_id' => $aplikasi_id,
+                        'aplikasi_id' => $own->aplikasi_id,
                         'form_head_id' => $storeForm->id,
-                        'store_id' => $userStore->store_id,
+                        'store_id' => $own->store_id,
                         'role_last_app' => $roleUsers->role_id,
                         'role_next_app' => $nextApp,
                         'status' => config('setting_app.status_approval.panding'),
@@ -99,12 +98,12 @@ class FormPemindahanController extends Controller
                     $storeFormApp = FormPenghapusanService::store($dataApp);
 
                     $logForm = [
-                        'nik' => $request->nik,
-                        'name' => $request->name,
-                        'aplikasi_id' => $aplikasi_id,
+                        'nik' => Auth::user()->nik,
+                        'name' => Auth::user()->name,
+                        'aplikasi_id' => $own->aplikasi_id,
                         'proses' => 'penghapusan',
                         'store_id' =>  $userStore->store_id,
-                        'reason' => $request->reason,
+                        'reason' => 'pemindahan',
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -117,11 +116,11 @@ class FormPemindahanController extends Controller
             DB::commit();
 
             Alert::success('succes', 'form berhasil disimpan');
-            return redirect()->route('form-pemindahan.index');
+            return redirect()->route('form_pemindahan.index');
         }catch (\Throwable $th){
             dd($th);
             Alert::error('Error!!',);
-            return redirect()->route('form-pemindahan.index');
+            return redirect()->route('form_pemindahan.index');
         }
     }
 }

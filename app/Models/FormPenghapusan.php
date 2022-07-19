@@ -9,6 +9,11 @@ class FormPenghapusan extends Model
     protected $table ='form_penghapusan';
     protected $guarded = [];
 
+    public function user()
+    {
+    	return $this->hasOne(User::class, 'id', 'created_by');
+    }
+
     public function store()
     {
         return $this->hasOne(Store::class, 'id', 'store_id');

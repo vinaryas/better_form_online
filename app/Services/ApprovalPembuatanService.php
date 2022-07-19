@@ -33,4 +33,15 @@ class ApprovalPembuatanService
         return ($nextPosition != null) ? $nextPosition->role_id : 0;
     }
 
+
+    public function countApproved()
+    {
+        return $this->ApprovalPembuatan->where('status', 'Approved');
+    }
+
+    public function countDisapproved()
+    {
+        return $this->ApprovalPembuatan->where('status', 'Disapproved');
+    }
+
 }

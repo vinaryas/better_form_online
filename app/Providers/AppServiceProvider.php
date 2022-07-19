@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
                 'text' => 'Dashboard',
                 'url' => route('home'),
                 'icon' => 'fas fa-home',
-                'active' => [route('home')],
+                'active' => ['home'],
             ]);
 
             $event->menu->add([
@@ -41,42 +41,42 @@ class AppServiceProvider extends ServiceProvider
                         'text' => 'Pembuatan ID',
                         'url' => route('form_pembuatan.index'),
                         'icon' => 'fas fa-file-alt',
-                        'active' => ['form_pembuatan.index'],
+                        'active' => ['form_pembuatan*'],
                     ],
                     [
                         'text' => 'Penghapusan ID',
                         'url' => route('form_penghapusan.index'),
                         'icon' => 'fas fa-file-alt',
-                        'active' => ['form_penghapusan.index'],
+                        'active' => ['form_penghapusan*'],
                     ],
                     [
                         'text' => 'Pemindahan ID',
                         'url' => route('form_pemindahan.index'),
                         'icon' => 'fas fa-file-alt',
-                        'active' => ['form_pemindahan.index'],
+                        'active' => ['form_pemindahan*'],
                     ],
 
                 ],
             ]);
 
-            // $event->menu->add([
-            //     'text' => 'Approval',
-            //     'icon' => '	fas fa-file-signature',
-            //     'submenu' => [
-            //         [
-            //             'text' => 'Pembuatan ID',
-            //             'url' => route('approval-pembuatan.index'),
-            //             'icon' => 'fas fa-file-signature',
-            //             'active' => ['approval-pembuatan*'],
-            //         ],
-            //         [
-            //             'text' => 'Penghapusan ID',
-            //             'url' => route('approval-penghapusan.index'),
-            //             'icon' => 'fas fa-file-signature',
-            //             'active' => ['approval-penghapusan*'],
-            //         ],
-            //     ],
-            // ]);
+            $event->menu->add([
+                'text' => 'Approval',
+                'icon' => '	fas fa-file-signature',
+                'submenu' => [
+                    [
+                        'text' => 'Pembuatan ID',
+                        'url' => route('approval_pembuatan.index'),
+                        'icon' => 'fas fa-file-signature',
+                        'active' => ['approval_pembuatan*'],
+                    ],
+                    [
+                        'text' => 'Penghapusan ID',
+                        'url' => route('approval_penghapusan.index'),
+                        'icon' => 'fas fa-file-signature',
+                        'active' => ['approval_penghapusan*'],
+                    ],
+                ],
+            ]);
         });
     }
 }

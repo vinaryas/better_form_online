@@ -80,9 +80,6 @@ class FormPenghapusanController extends Controller
                 $index++;
             }
 
-            $status = ['status' => 'i',];
-            $updateDataUser = userService::update($status, $request->user_id);
-
             DB::commit();
 
             Alert::success('succes', 'form berhasil disimpan');
