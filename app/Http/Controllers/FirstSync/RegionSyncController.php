@@ -33,15 +33,15 @@ class RegionSyncController extends Controller
                     'name'=>$array['name'],
                 ];
 
-                $store = regionService::store($data);
+                $store = regionService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
-            return redirect()->route('login');
+            Alert::success('Berhasil','berhasil di download dari server');
+            return redirect()->route('storeSync');
         }catch(\Throwable $th){
             dd($th);
             Alert::error('Error !!!');
-            return redirect()->route('login');
+            return redirect()->route('storeSync');
         }
     }
 }

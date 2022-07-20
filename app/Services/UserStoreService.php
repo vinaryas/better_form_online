@@ -13,9 +13,9 @@ class UserStoreService
         $this->UserStore = $UserStore;
     }
 
-    public function store($data)
+    public function sync($data)
     {
-        return $this->UserStore->create($data);
+        return $this->UserStore->updateOrCreate($data);
     }
 
     public function all()
@@ -23,9 +23,9 @@ class UserStoreService
 		return $this->UserStore->query()->with('stores', 'user');
 	}
 
-	public function update($data, $id)
+	public function update($data, $userId, $storeId)
     {
-		return $this->UserStore->where('id', $id)->update($data);
+		return $this->UserStore->where('user_id', $userId)->where('store_id', $storeId)->update($data);
 	}
 
     public function delete($data)
@@ -51,5 +51,10 @@ class UserStoreService
     public function getStoreNotOwned($storeId)
     {
         return $this->all()->where('store_id', '!=', $storeId);
+    }
+
+    public function getUserStoreNotAuth($store_id, $user_id)
+    {
+        return $this->all()->where('store_id', $store_id)->where('user_id', '!=', $user_id);
     }
 }

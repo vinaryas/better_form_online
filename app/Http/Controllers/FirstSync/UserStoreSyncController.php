@@ -11,7 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class UserStoreSyncController extends Controller
 {
     public function index(){
-        return view('firstTimeSync.adminSync');
+        return view('firstTimeSync.userStoreSync');
     }
 
     public function sync(){
@@ -29,18 +29,19 @@ class UserStoreSyncController extends Controller
 
             foreach($arrays['data'] as $array){
                 $data = [
-                    'aplikasi'=> $array['aplikasi'],
+                    'user_id'=> $array['user_id'],
+                    'store_id'=> $array['store_id'],
                 ];
 
-                $store = UserStoreService::store($data);
+                $store = UserStoreService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
-            return redirect()->route('roleSync');
+            Alert::success('Berhasil','berhasil di download dari server');
+            return redirect()->route('aplikasiSync');
         }catch(\Throwable $th){
             dd($th);
             Alert::error('Error !!!');
-            return redirect()->route('roleSync');
+            return redirect()->route('aplikasiSync');
         }
     }
 }

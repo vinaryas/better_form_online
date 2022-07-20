@@ -30,17 +30,16 @@ class AdminSyncController extends Controller
             foreach($arrays['data'] as $array){
                 $data = [
                     'name'=> $array['name'],
-                    'username'=>$array['id'],
+                    'nik'=>$array['nik'],
                     'region_id'=>$array['region_id'],
-                    'role_id'=>$array['role_id'],
                     'email'=>$array['email'],
                     'password'=>$array['password2'],
                 ];
 
-                $store = UserService::store($data);
+                $store = UserService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
+            Alert::success('Berhasil','berhasil di download dari server');
             return redirect()->route('roleSync');
         }catch(\Throwable $th){
             dd($th);

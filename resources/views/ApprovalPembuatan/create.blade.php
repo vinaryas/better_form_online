@@ -1,9 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', 'Detail')
+@section('title', 'ID Management')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Detail</h1>
 @stop
 
 @section('content')
@@ -23,7 +22,9 @@
             </div>
             <div class="col-md-6">
                 <label> Store </label>
-                <input type="text" value="{{ $forms->store->name }}" name="store" class="form-control" readonly>
+                <select  name="store_id" class="form-control" readonly>
+                    <option value="{{ $forms->store_id }}">{{ $forms->store->name }}</option>
+                </select>
             </div>
             <div class="col-md-6">
                 <label> Aplikasi </label>

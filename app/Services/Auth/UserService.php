@@ -7,15 +7,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class userService
+class UserService
 {
+    private $User;
+
+   public function __construct(User $User)
+   {
+        $this->User = $User;
+   }
+
     public function data($data)
     {
         return [
                 'name' => $data['name'],
-                'username' => $data['username'],
+                'nik' => $data['nik'],
+                'region_id' => $data['region_id'],
                 'email' => $data['email'],
-                'password' => Hash::make($data['password'])
+                'password' => $data['password']
         ];
     }
 
@@ -80,6 +88,11 @@ class userService
     public function getById($id)
     {
         return User::all()->where('id', $id);
+    }
+
+    public function sync ($data)
+    {
+        return $this->User->updateOrCreate($data);
     }
 
 }

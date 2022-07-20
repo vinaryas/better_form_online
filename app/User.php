@@ -5,9 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
 
 class User extends Authenticatable
 {
+    use LaratrustUserTrait;
     use Notifiable;
 
     /**
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'nik', 'email', 'password',
+        'name', 'nik', 'region_id', 'email', 'password',
     ];
 
     /**
@@ -41,7 +43,7 @@ class User extends Authenticatable
     {
         return $query->join('role_user', 'users.id', '=', 'role_user.user_id')
                      ->join('roles', 'role_user.role_id', '=', 'roles.id')
-                     ->select('users.id', 'users.name', 'users.username', 'users.email', 'roles.name as rolename');
+                     ->select('users.id', 'users.name', 'users.nik', 'users.email', 'roles.name as rolename');
     }
 
     public function stores()

@@ -17,8 +17,8 @@ class PermissionService
 		return $this->Permission->query();
 	}
 
-    public function store($data){
-        return $this->Permission->upsert($data);
+    public function sync($data){
+        return $this->Permission->updateOrCreate($data);
     }
 
     public function find($id){

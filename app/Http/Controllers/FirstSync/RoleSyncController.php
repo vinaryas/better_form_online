@@ -34,10 +34,10 @@ class RoleSyncController extends Controller
                     'description'=>$array['description'],
                 ];
 
-                $store = RoleService::store($data);
+                $store = RoleService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
+            Alert::success('Berhasil','berhasil di download dari server');
             return redirect()->route('roleUserSync');
         }catch(\Throwable $th){
             dd($th);

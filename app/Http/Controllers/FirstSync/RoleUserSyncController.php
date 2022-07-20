@@ -34,10 +34,10 @@ class RoleUserSyncController extends Controller
                     'user_type'=>$array['user_type'],
                 ];
 
-                $store = roleUserService::store($data);
+                $store = roleUserService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
+            Alert::success('Berhasil','berhasil di download dari server');
             return redirect()->route('permissionSync');
         }catch(\Throwable $th){
             dd($th);

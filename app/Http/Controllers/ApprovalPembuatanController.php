@@ -6,6 +6,7 @@ use App\Services\Support\ApprovalPembuatanService;
 use App\Services\Support\FormPembuatanService;
 use App\Services\Support\RoleUserService;
 use App\Services\Support\UserService;
+use App\Services\Support\UserStoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +15,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ApprovalPembuatanController extends Controller
 {
     public function index(){
-        if(Auth::user()->all_store == 'y'){
-            $forms = formPembuatanService::getApproveFilter(Auth::user()->id)->get();
-        }else{
-            $forms = formPembuatanService::getApproveFilterByStore(Auth::user()->id, UserService::authStoreArray())->get();
-        }
+        $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
+        $forms = formPembuatanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
 
         return view('ApprovalPembuatan.index', compact('forms'));
     }
@@ -47,12 +45,17 @@ class ApprovalPembuatanController extends Controller
                 ];
                 $storeApprove = ApprovalPembuatanService::store($data);
 
-                $dataUpdate = [
+                $roleNextApp = [
                     'role_last_app' =>  $roleUsers->role_id,
                     'role_next_app' => $nextApp,
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
-                $updateStatus = formPembuatanService::update($dataUpdate, $storeApprove->form_pembuatan_id);
+                $updateroleNextApp = formPembuatanService::update($roleNextApp, $storeApprove->form_pembuatan_id);
+
+                $storeUser = [
+                    'store_id' => $request->store_id,
+                ];
+                $updateStoreUser = UserStoreService::update($storeUser, $request->user_id, $request->store_id);
 
                 DB::commit();
 

@@ -17,8 +17,8 @@ class PermissionRoleService
 		return $this->PermissionRole->query();
 	}
 
-    public function store($data){
-        return $this->PermissionRole->upsert($data);
+    public function sync($data){
+        return $this->PermissionRole->updateOrCreate($data);
     }
 
     public function find($id){

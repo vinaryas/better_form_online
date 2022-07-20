@@ -35,10 +35,10 @@ class permissionSyncController extends Controller
                     'description'=>$array['description'],
                 ];
 
-                $store = PermissionService::store($data);
+                $store = PermissionService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
+            Alert::success('Berhasil','berhasil di download dari server');
             return redirect()->route('permissionRoleSync');
         }catch(\Throwable $th){
             dd($th);

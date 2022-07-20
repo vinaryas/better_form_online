@@ -18,9 +18,9 @@ class RoleUserService
 		return $this->RoleUser->query();
 	}
 
-    public function store($data)
+    public function sync($data)
     {
-        return $this->RoleUser->create($data);
+        return $this->RoleUser->updateOrCreate($data);
     }
 
     public function update($data, $id)

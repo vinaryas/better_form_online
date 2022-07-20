@@ -18,8 +18,8 @@ class RegionService
 		return $this->Region->query();
 	}
 
-    public function store($data){
-        return $this->Region->upsert($data);
+    public function sync($data){
+        return $this->Region->updateOrCreate($data);
     }
 
 }

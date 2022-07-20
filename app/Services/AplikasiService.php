@@ -18,9 +18,9 @@ class AplikasiService
         return $this->Aplikasi->query();
    }
 
-   public function store($data)
+   public function sync($data)
     {
-        return $this->Aplikasi->upsert($data);
+        return $this->Aplikasi->updateOrCreate($data);
     }
 
 }

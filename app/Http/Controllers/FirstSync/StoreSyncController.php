@@ -35,15 +35,15 @@ class StoreSyncController extends Controller
                     'email'=>$array['email'],
                 ];
 
-                $store = StoreService::store($data);
+                $store = StoreService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
-            return redirect()->route('regionSync');
+            Alert::success('Berhasil','berhasil di download dari server');
+            return redirect()->route('userStoreSync');
         }catch(\Throwable $th){
             dd($th);
             Alert::error('Error !!!');
-            return redirect()->route('regionSync');
+            return redirect()->route('userStoreSync');
         }
     }
 }

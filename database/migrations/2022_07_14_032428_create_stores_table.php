@@ -16,11 +16,9 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->string('name');
-            $table->unsignedBigInteger('region_id');
+            $table->integer('region_id');
             $table->string('email');
             $table->timestamps();
-
-            $table->foreign('region_id')->references('id')->on('regions');
         });
     }
 

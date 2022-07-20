@@ -11,12 +11,12 @@ use RealRashid\SweetAlert\Facades\Alert;
 class AplikasiSyncController extends Controller
 {
     public function index(){
-        return view('firstTimeSync.adminSync');
+        return view('firstTimeSync.aplikasiSync');
     }
 
     public function sync(){
         $client = new Client();
-        $url = 'http://127.0.0.1:8000/api/aplikasi';
+        $url = 'http://127.0.0.1:8000/api/aplikasi/1';
 
         try{
             $response = $client->request('GET', $url, [
@@ -29,18 +29,18 @@ class AplikasiSyncController extends Controller
 
             foreach($arrays['data'] as $array){
                 $data = [
-                    'aplikasi'=> $array['aplikasi'],
+                    'name'=> $array['name'],
                 ];
 
-                $store = AplikasiService::store($data);
+                $store = AplikasiService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
-            return redirect()->route('roleSync');
+            Alert::success('Berhasil','berhasil di download dari server');
+            return redirect()->route('login');
         }catch(\Throwable $th){
             dd($th);
             Alert::error('Error !!!');
-            return redirect()->route('roleSync');
+            return redirect()->route('login');
         }
     }
 }

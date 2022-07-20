@@ -1,6 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Form')
+@section('title', 'ID Management')
+
+@section('content_header')
+@stop
 
 @section('content')
 <form class="card" action="{{ route('form_penghapusan.store') }}" method="POST">

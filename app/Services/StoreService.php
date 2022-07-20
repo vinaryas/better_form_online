@@ -17,6 +17,7 @@ class StoreService
 	{
 		return $this->Store->query()->with('region');
 	}
+
     public function store($data)
     {
         return $this->Store->create($data);
@@ -27,5 +28,9 @@ class StoreService
         return $this->all()->where('id', $storeId);
     }
 
-   
+    public function sync($data)
+    {
+        return $this->Store->updateOrCreate($data);
+    }
+
 }

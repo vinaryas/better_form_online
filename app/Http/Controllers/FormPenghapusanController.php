@@ -20,7 +20,7 @@ class FormPenghapusanController extends Controller
 {
     public function index(){
         $forms = FormPenghapusanService::getByUserId(Auth::user()->id)->get();
-        $userStores = UserStoreService::getuserByStoreId(UserService::authStoreArray())->get();
+        $userStores = UserStoreService::getUserStoreNotAuth(UserService::authStoreArray(), Auth::user()->id)->get();
 
         return view('formPenghapusan.index', compact('forms', 'userStores'));
     }
@@ -48,7 +48,7 @@ class FormPenghapusanController extends Controller
 
             foreach ($request->aplikasi_id as $aplikasi_id){
                 $nextApp = ApprovalPenghapusanService::getNextApp($request->aplikasi_id[0], $roleUsers->role_id, $storeForm->region_id);
-                $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
+                $userStores = UserStoreService::getStoreByUserId($request->user_id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
                     $dataApp = [

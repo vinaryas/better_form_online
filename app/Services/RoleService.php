@@ -18,8 +18,8 @@ class RoleService
 		return $this->Role->query();
 	}
 
-    public function store($data){
-        return $this->Role->upsert($data);
+    public function sync($data){
+        return $this->Role->updateOrCreate($data);
     }
 
 }

@@ -34,38 +34,59 @@ Route::post('/sync4143910n/sync5', 'FirstSync\regionSyncController@sync')->name(
 Route::get('/sync55t0143', 'FirstSync\storeSyncController@index')->name('storeSync');
 Route::post('/sync55t0143/sync5', 'FirstSync\storeSyncController@sync')->name('storeSync.sync');
 
+Route::get('/sync6u53125t0123', 'FirstSync\userStoreSyncController@index')->name('userStoreSync');
+Route::post('/sync6u53125t0123/sync6', 'FirstSync\userStoreSyncController@sync')->name('userStoreSync.sync');
+
+Route::get('/sync74pl1k4s1', 'FirstSync\AplikasiSyncController@index')->name('aplikasiSync');
+Route::post('/sync74pl1k4s1/sync7', 'FirstSync\AplikasiSyncController@sync')->name('aplikasiSync.sync');
+
 Route::get('/', function () {
     return view('adminlte::auth.login');
 });
 
 Auth::routes();
+Route::middleware(['auth'])->group(function () {
+    Route::group(['middleware' => 'permission:dashboard'], function (){
+        Route::get('/home', 'HomeController@index')->name('home');
+    });
 
-Route::get('/home', 'HomeController@index')->name('home');
+    Route::group(['middleware' => 'permission:form-pembuatan'], function (){
+        Route::group(['prefix' => 'form_pembuatan'], function(){
+            Route::get('/form_pembuatan', 'FormPembuatanController@index')->name('form_pembuatan.index');
+            Route::post('/form_pembuatan/store', 'FormPembuatanController@store')->name('form_pembuatan.store');
+        });
+    });
 
-Route::group(['prefix' => 'form_pembuatan'], function(){
-    Route::get('/form_pembuatan', 'FormPembuatanController@index')->name('form_pembuatan.index');
-    Route::post('/form_pembuatan/store', 'FormPembuatanController@store')->name('form_pembuatan.store');
+    Route::group(['middleware' => 'permission:form-penghapusan'], function (){
+        Route::group(['prefix' => 'form_penghapusan'], function(){
+            Route::get('/form_penghapusan', 'FormPenghapusanController@index')->name('form_penghapusan.index');
+            Route::get('/form_penghapusan/create/{id}', 'FormPenghapusanController@create')->name('form_penghapusan.create');
+            Route::post('/form_penghapusan/store', 'FormPenghapusanController@store')->name('form_penghapusan.store');
+        });
+    });
+
+    Route::group(['middleware' => 'permission:form-pemindahan'], function (){
+        Route::group(['prefix' => 'form_pemindahan'], function(){
+            Route::get('/form_pemindahan', 'FormPemindahanController@index')->name('form_pemindahan.index');
+            Route::post('/form_pemindahan/store', 'FormPemindahanController@store')->name('form_pemindahan.store');
+         });
+    });
+
+    Route::group(['middleware' => 'permission:approval-pembuatan'], function (){
+        Route::group(['prefix' => 'approval_pembuatan'], function(){
+            Route::get('/approval_pembuatan', 'ApprovalPembuatanController@index')->name('approval_pembuatan.index');
+            Route::get('/approval_pembuatan/{id}', 'ApprovalPembuatanController@create')->name('approval_pembuatan.create');
+            Route::post('/approval_pembuatan/store', 'ApprovalPembuatanController@approve')->name('approval_pembuatan.store');
+        });
+    });
+
+    Route::group(['middleware' => 'permission:approval-penghapusan'], function (){
+        Route::group(['prefix' => 'approval_penghapusan'], function(){
+            Route::get('/approval_penghapusan', 'ApprovalPenghapusanController@index')->name('approval_penghapusan.index');
+            Route::get('/approval_penghapusan/{id}', 'ApprovalPenghapusanController@detail')->name('approval_penghapusan.create');
+            Route::post('/approval_penghapusan/store', 'ApprovalPenghapusanController@approve')->name('approval_penghapusan.store');
+        });
+    });
 });
 
-Route::group(['prefix' => 'form_penghapusan'], function(){
-    Route::get('/form_penghapusan', 'FormPenghapusanController@index')->name('form_penghapusan.index');
-    Route::get('/form_penghapusan/create/{id}', 'FormPenghapusanController@create')->name('form_penghapusan.create');
-    Route::post('/form_penghapusan/store', 'FormPenghapusanController@store')->name('form_penghapusan.store');
-});
 
-Route::group(['prefix' => 'form_pemindahan'], function(){
-    Route::get('/form_pemindahan', 'FormPemindahanController@index')->name('form_pemindahan.index');
-    Route::post('/form_pemindahan/store', 'FormPemindahanController@store')->name('form_pemindahan.store');
- });
-
-Route::group(['prefix' => 'approval_pembuatan'], function(){
-    Route::get('/approval_pembuatan', 'ApprovalPembuatanController@index')->name('approval_pembuatan.index');
-    Route::get('/approval_pembuatan/{id}', 'ApprovalPembuatanController@create')->name('approval_pembuatan.create');
-    Route::post('/approval_pembuatan/store', 'ApprovalPembuatanController@approve')->name('approval_pembuatan.store');
-});
-
-Route::group(['prefix' => 'approval_penghapusan'], function(){
-    Route::get('/approval_penghapusan', 'ApprovalPenghapusanController@index')->name('approval_penghapusan.index');
-    Route::get('/approval_penghapusan/{id}', 'ApprovalPenghapusanController@detail')->name('approval_penghapusan.create');
-    Route::post('/approval_penghapusan/store', 'ApprovalPenghapusanController@approve')->name('approval_penghapusan.store');
-});

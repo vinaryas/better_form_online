@@ -41,4 +41,7 @@ class RoleUser extends Model
     {
         return $this->hasOne(Role::class, 'id', 'role_id');
     }
+
+    const UPDATED_AT = null;
+    const CREATED_AT = null;
 }

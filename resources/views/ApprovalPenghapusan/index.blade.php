@@ -1,9 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', 'Approval')
+@section('title', 'ID Management')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Approval</h1>
 @stop
 
 @section('content')

@@ -33,15 +33,15 @@ class PermissionRoleSyncController extends Controller
                     'role_id'=>$array['role_id'],
                 ];
 
-                $store = PermissionRoleService::store($data);
+                $store = PermissionRoleService::sync($data);
             }
 
-            Alert::success('Berhasil','Store berhasil di download dari server');
-            return redirect()->route('storeSync');
+            Alert::success('Berhasil','berhasil di download dari server');
+            return redirect()->route('regionSync');
         }catch(\Throwable $th){
             dd($th);
             Alert::error('Error !!!');
-            return redirect()->route('storeSync');
+            return redirect()->route('regionSync');
         }
     }
 }
