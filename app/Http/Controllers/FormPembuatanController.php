@@ -18,8 +18,31 @@ use RealRashid\SweetAlert\Facades\Alert;
 class FormPembuatanController extends Controller
 {
     public function index(){
-        $forms = FormPembuatanService::getByUserId(Auth::user()->id)->get();
+        $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $apps = AplikasiService::all()->get();
+        if($roleUsers->role_id == config('setting_app.role_id.admin')){
+            $forms = FormPembuatanService::all()->get();
+            //  foreach ( $forms as $form ){
+            //     if($form->role_next_app == 0 && $form->status == config('setting_app.status_approval.approve')){
+            //         $status = 'Approved';
+            //     }elseif($form->role_next_app === 0 && $form->status == config('setting_app.status_approval.disapprove')){
+            //         $status = 'Disapproved';
+            //     }else{
+            //         $status = 'Progress';
+            //     }
+            //  }
+        }else{
+            $forms = FormPembuatanService::getByUserId(Auth::user()->id)->get();
+            // foreach ( $forms as $form ){
+            //     if($form->role_next_app == 0 && $form->status == config('setting_app.status_approval.approve')){
+            //         $status = 'Approved';
+            //     }elseif($form->role_next_app === 0 && $form->status == config('setting_app.status_approval.disapprove')){
+            //         $status = 'Disapproved';
+            //     }else{
+            //         $status = 'Progress';
+            //     }
+            // }
+        }
 
         return view('FormPembuatan.index', compact('forms', 'apps'));
     }

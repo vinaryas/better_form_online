@@ -16,7 +16,12 @@ class ApprovalPembuatanController extends Controller
 {
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
-        $forms = formPembuatanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
+        if(Auth::user()->all_store == 'y'){
+            $forms = formPembuatanService::getApproveFilter($roleUsers->role_id)->get();
+        }else{
+            $forms = formPembuatanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
+        }
+
 
         return view('ApprovalPembuatan.index', compact('forms'));
     }

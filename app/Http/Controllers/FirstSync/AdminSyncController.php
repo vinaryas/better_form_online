@@ -31,6 +31,7 @@ class AdminSyncController extends Controller
                 $data = [
                     'name'=> $array['name'],
                     'nik'=>$array['nik'],
+                    'all_store'=>$array['all_store'],
                     'region_id'=>$array['region_id'],
                     'email'=>$array['email'],
                     'password'=>$array['password2'],

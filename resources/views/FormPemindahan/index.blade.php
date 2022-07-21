@@ -61,9 +61,8 @@
                 <tr>
                     <th> No. </th>
                     <th> Name </th>
-                    <th> Store </th>
-                    <th> Aplikasi </th>
-                    <th> Status </th>
+                    <th> From Store </th>
+                    <th> To Store </th>
                 </tr>
             </thead>
             <tbody>
@@ -71,9 +70,8 @@
                     <tr>
                         <td>{{ $form->id }}</td>
                         <td>{{ $form->user->name }}</td>
-                        <td>{{ $form->stores->name }}</td>
-                        <td>{{ $form->aplikasi_id }}</td>
-                        <td>{{ $form->status }}</td>
+                        <td>{{ $form->store1->name }}</td>
+                        <td>{{ $form->store2->name }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -19,8 +19,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 class FormPenghapusanController extends Controller
 {
     public function index(){
-        $forms = FormPenghapusanService::getByUserId(Auth::user()->id)->get();
+        $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $userStores = UserStoreService::getUserStoreNotAuth(UserService::authStoreArray(), Auth::user()->id)->get();
+        if($roleUsers->role_id == config('setting_app.role_id.admin')){
+            $forms = FormPenghapusanService::all()->get();
+        }else{
+            $forms = FormPenghapusanService::getByUserId(Auth::user()->id)->get();
+
+        }
 
         return view('formPenghapusan.index', compact('forms', 'userStores'));
     }

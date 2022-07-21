@@ -15,7 +15,7 @@ class FormPenghapusanService
 
    public function all()
 	{
-		return $this->FormPenghapusan->query()->with('form_head');
+		return $this->FormPenghapusan->query();
 	}
 
     public function store($data)

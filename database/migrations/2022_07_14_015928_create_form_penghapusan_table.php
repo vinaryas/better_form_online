@@ -19,9 +19,6 @@ class CreateFormPenghapusanTable extends Migration
             $table->bigInteger('form_head_id');
             $table->integer('created_by');
             $table->integer('store_id')->nullable();
-            $table->integer('role_last_app');
-            $table->integer('role_next_app');
-            $table->integer('status');
             $table->timestamps();
         });
     }

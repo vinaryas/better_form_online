@@ -24,7 +24,7 @@ class FormPemindahanController extends Controller
     public function index(){
         $owns = FormPembuatanService::getByUserIdActive(Auth::user()->id)->get();
         $forms = FormPemindahanService::getByUserId(Auth::user()->id)->get();
-        $stores = StoreService::all()->get();
+        $stores = StoreService::getStoreNonExclusive()->get();
         $apps = AplikasiService::all()->get();
 
         return view('FormPemindahan.index', compact('forms', 'owns', 'stores', 'apps'));
@@ -34,6 +34,7 @@ class FormPemindahanController extends Controller
         DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $owns = FormPembuatanService::getByUserIdActive(Auth::user()->id)->get();
+        $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
 
         try {
             $index = 0;
@@ -44,12 +45,26 @@ class FormPemindahanController extends Controller
             ];
             $storeForm = FormHeadService::store($form);
 
+            foreach($userStores as $userStore){
+                $dataPemindahan = [
+                    'form_head_id' => $storeForm->id,
+                    'created_by'=>Auth::user()->id,
+                    'nik' =>Auth::user()->nik,
+                    'region_id'=>Auth::user()->region_id,
+                    'from_store' => $userStore->store_id,
+                    'to_store' => $request->store_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $storeDataPemindahan = FormPemindahanService::store($dataPemindahan);
+            }
+
             foreach ($owns as $own){
                 $nextApp = ApprovalPembuatanService::getNextApp($request->aplikasi_id[0], $roleUsers->role_id, $storeForm->region_id);
                 $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
-                    $dataApp = [
+                    $data1 = [
                         'aplikasi_id' => $own->aplikasi_id,
                         'form_head_id' => $storeForm->id,
                         'user_id_aplikasi'=> $own->user_id_aplikasi,
@@ -62,9 +77,9 @@ class FormPemindahanController extends Controller
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-                    $storeFormApp = FormPembuatanService::store($dataApp);
+                    $storeData = FormPembuatanService::store($data1);
 
-                    $logForm = [
+                    $logForm1 = [
                         'nik' => Auth::user()->nik,
                         'name' => Auth::user()->name,
                         'aplikasi_id' => $own->aplikasi_id,
@@ -74,7 +89,7 @@ class FormPemindahanController extends Controller
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-                    $storelog = FormLogService::store($logForm);
+                    $storelog = FormLogService::store($logForm1);
                 }
                 $index++;
             }
@@ -84,7 +99,7 @@ class FormPemindahanController extends Controller
                 $userStores = UserStoreService::getStoreByUserId(Auth::user()->id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
-                    $dataApp = [
+                    $data2 = [
                         'aplikasi_id' => $own->aplikasi_id,
                         'form_head_id' => $storeForm->id,
                         'store_id' => $own->store_id,
@@ -95,9 +110,9 @@ class FormPemindahanController extends Controller
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-                    $storeFormApp = FormPenghapusanService::store($dataApp);
+                    $storeData = FormPenghapusanService::store($data2);
 
-                    $logForm = [
+                    $logForm2 = [
                         'nik' => Auth::user()->nik,
                         'name' => Auth::user()->name,
                         'aplikasi_id' => $own->aplikasi_id,
@@ -107,7 +122,7 @@ class FormPemindahanController extends Controller
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-                    $storelog = FormLogService::store($logForm);
+                    $storelog = FormLogService::store($logForm2);
                 }
 
                 $index++;

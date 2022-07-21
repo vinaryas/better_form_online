@@ -14,10 +14,11 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ApprovalPenghapusanController extends Controller
 {
     public function index(){
+        $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         if(Auth::user()->all_store == 'y'){
-            $forms = formPenghapusanService::getApproveFilter(Auth::user()->id)->get();
+            $forms = formPenghapusanService::getApproveFilter($roleUsers->role_id)->get();
         }else{
-            $forms = formPenghapusanService::getApproveFilterByStore(Auth::user()->id, UserService::authStoreArray())->get();
+            $forms = formPenghapusanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
         }
 
         return view('ApprovalPenghapusan.index', compact('forms'));

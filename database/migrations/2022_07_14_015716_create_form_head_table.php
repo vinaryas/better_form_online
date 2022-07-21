@@ -18,6 +18,10 @@ class CreateFormHeadTable extends Migration
             $table->integer('created_by');
             $table->integer('nik');
             $table->integer('region_id');
+            $table->string('type');
+            $table->integer('role_last_app');
+            $table->integer('role_next_app');
+            $table->integer('status');
             $table->timestamps();
         });
     }
