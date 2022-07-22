@@ -16,7 +16,6 @@
                     <th> NIK </th>
                     <th> Created By </th>
                     <th> Store </th>
-                    <th> Aplikasi </th>
                     <th> Approve </th>
                 </tr>
             </thead>
@@ -27,7 +26,6 @@
                         <td>{{ $form->user->nik }}</td>
                         <td>{{ $form->user->name }}</td>
                         <td>{{ $form->store->name }}</td>
-                        <td>{{ $form->aplikasi->name }}</td>
                         <td><a href="{{ route('approval_pembuatan.create', $form->id) }}"
                             class="btn btn-info btn-sm"> Detail <i class="fas fa-angle-right"></i>
                         </a></td>

@@ -21,7 +21,7 @@ class CreateFormPembuatanTable extends Migration
             $table->string('user_id_aplikasi')->nullable();
             $table->string('pass')->nullable();
             $table->integer('store_id')->nullable();
-           
+            $table->integer('status');
             $table->timestamps();
         });
     }

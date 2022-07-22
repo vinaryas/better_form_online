@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\support\AplikasiService;
 use App\Services\Support\ApprovalPenghapusanService;
+use App\Services\Support\ApprovalService;
 use App\Services\Support\FormHeadService;
 use App\Services\Support\FormLogService;
 use App\Services\Support\FormPenghapusanService;
@@ -42,6 +43,7 @@ class FormPenghapusanController extends Controller
     public function store(Request $request){
         DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
+        $nextApp = ApprovalService::getNextApp($roleUsers->role_id, Auth::user()->region_id);
 
         try{
             $index = 0;
@@ -49,11 +51,13 @@ class FormPenghapusanController extends Controller
                 'created_by' =>  Auth::user()->id,
                 'nik' => Auth::user()->nik,
                 'region_id'=>Auth::user()->region_id,
+                'role_last_app' => $roleUsers->role_id,
+                'role_next_app' => $nextApp,
+                'status' => config('setting_app.status_approval.panding'),
             ];
             $storeForm = FormHeadService::store($form);
 
             foreach ($request->aplikasi_id as $aplikasi_id){
-                $nextApp = ApprovalPenghapusanService::getNextApp($request->aplikasi_id[0], $roleUsers->role_id, $storeForm->region_id);
                 $userStores = UserStoreService::getStoreByUserId($request->user_id, UserService::authStoreArray())->get();
 
                 foreach ($userStores as $userStore){
@@ -61,8 +65,6 @@ class FormPenghapusanController extends Controller
                         'aplikasi_id' => $aplikasi_id,
                         'form_head_id' => $storeForm->id,
                         'store_id' => $userStore->store_id,
-                        'role_last_app' => $roleUsers->role_id,
-                        'role_next_app' => $nextApp,
                         'status' => config('setting_app.status_approval.panding'),
                         'created_by' => Auth::user()->id,
                         'created_at' => now(),

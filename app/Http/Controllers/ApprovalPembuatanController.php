@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\Support\ApprovalPembuatanService;
+use App\Services\Support\ApprovalService;
+use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPembuatanService;
 use App\Services\Support\RoleUserService;
 use App\Services\Support\UserService;
@@ -17,9 +19,9 @@ class ApprovalPembuatanController extends Controller
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         if(Auth::user()->all_store == 'y'){
-            $forms = formPembuatanService::getApproveFilter($roleUsers->role_id)->get();
+            $forms = formHeadService::getApproveFilter($roleUsers->role_id)->get();
         }else{
-            $forms = formPembuatanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
+            $forms = formHeadService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
         }
 
 
@@ -27,20 +29,23 @@ class ApprovalPembuatanController extends Controller
     }
 
     public function create($id){
-        $forms = formPembuatanService::getById($id)->first();
+        $forms = FormHeadService::getById($id)->first();
+        $apps = formPembuatanService::getByFormHeadId($forms->id)->get();
+        // dd($forms, $apps);
 
-        return view('ApprovalPembuatan.create', compact('forms'));
+        return view('ApprovalPembuatan.create', compact('forms', 'apps'));
     }
 
     public function approve(Request $request){
         DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
+        $apps = formPembuatanService::getByFormHeadId($request->form_head_id)->get();
 
         if (isset($_POST["approve"])){
-            $nextApp = ApprovalPembuatanService::getNextApp($request->aplikasi_id, $roleUsers->role_id, Auth::user()->region_id);
+            $nextApp = ApprovalService::getNextApp($roleUsers->role_id, Auth::user()->region_id);
             try{
                 $data = [
-                    'form_pembuatan_id' => $request->form_pembuatan_id,
+                    'form_head_id' => $request->form_head_id,
                     'approved_by' => Auth::user()->id,
                     'approver_nik'=>Auth::user()->nik ,
                     'approver_name'=>Auth::user()->name,
@@ -48,14 +53,23 @@ class ApprovalPembuatanController extends Controller
                     'approver_region_id'=> Auth::user()->region_id,
                     'status' => 'Approved'
                 ];
-                $storeApprove = ApprovalPembuatanService::store($data);
+                $storeApprove = approvalService::store($data);
 
                 $roleNextApp = [
-                    'role_last_app' =>  $roleUsers->role_id,
+                    'role_last_app' => $roleUsers->role_id,
                     'role_next_app' => $nextApp,
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
-                $updateroleNextApp = formPembuatanService::update($roleNextApp, $storeApprove->form_pembuatan_id);
+                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_head_id);
+                // $updateroleNextApp = formPembuatanService::update($roleNextApp, $storeApprove->form_pembuatan_id);
+
+                $apps = formPembuatanService::getByFormHeadId($request->form_head_id)->get();
+                foreach($apps as $app){
+                    $appStatus = [
+                        'status'=> config('setting_app.status_approval.approve'),
+                    ];
+                    $updateroleNextApp = formPembuatanService::update($appStatus, $app->id);
+                }
 
                 $storeUser = [
                     'store_id' => $request->store_id,
@@ -83,14 +97,15 @@ class ApprovalPembuatanController extends Controller
                     'approver_region_id'=> Auth::user()->region_id,
                     'status' => 'Disapproved'
                 ];
-                $storeApprove = approvalPembuatanService::store($data);
+                $storeApprove = approvalService::store($data);
 
-                $dataUpdate = [
+                $roleNextApp = [
                     'role_last_app' => $roleUsers->role_id,
                     'role_next_app' => 0,
                     'status'=> config('setting_app.status_approval.disapprove'),
                 ];
-                $updateStatus = formPembuatanService::update($dataUpdate, $storeApprove->form_pembuatan_id);
+                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_pembuatan_id);
+                // $updateStatus = formPembuatanService::update($dataUpdate, $storeApprove->form_pembuatan_id);
 
                 DB::commit();
 

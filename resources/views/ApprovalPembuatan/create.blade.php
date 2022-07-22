@@ -10,7 +10,7 @@
     {{ csrf_field() }}
     <div class="card-body">
         <input type="hidden" value="{{ $forms->created_by }}" name="user_id">
-        <input type="hidden" value="{{ $forms->id }}" name="form_pembuatan_id">
+        <input type="hidden" value="{{ $forms->id }}" name="form_head_id">
         <div class="row">
             <div class="col-md-6">
                 <label> NIK </label>
@@ -26,20 +26,26 @@
                     <option value="{{ $forms->store_id }}">{{ $forms->store->name }}</option>
                 </select>
             </div>
-            <div class="col-md-6">
-                <label> Aplikasi </label>
-                <select  name="aplikasi_id" class="form-control" readonly>
-                    <option value="{{ $forms->aplikasi_id }}">{{ $forms->aplikasi->name }}</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label> ID Aplikasi </label>
-                <input type="text" value="{{ $forms->user_id_aplikasi}}" name="user_id_aplikasi" class="form-control" readonly>
-            </div>
-            <div class="col-md-6">
-                <label> Password </label>
-                <input type="text" value="{{ $forms->pass}}" name="pass" class="form-control" readonly>
-            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="table" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th> Aplikasi </th>
+                        <th> ID </th>
+                        <th> Password </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($apps as $app)
+                        <tr>
+                            <td>{{ $app->aplikasi->name }}</td>
+                            <td>{{ $app->user_id_aplikasi }}</td>
+                            <td>{{ $app->pass }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
         <div class="card-body">
             <div class="float-left">
@@ -58,3 +64,23 @@
 
 @stop
 
+     {{-- <div class="col-md-6">
+                <label> Aplikasi </label>
+                <select  name="aplikasi_id[]" class="form-control" readonly>
+                @foreach ($apps as $app)
+                <option value="{{ $app->aplikasi_id }}">{{ $app->aplikasi->name }}</option>
+                @endforeach
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label> ID Aplikasi </label>
+                <select  name="user_id_aplikasi[]" class="form-control" readonly>
+                @foreach ($apps as $app)
+                <option value="{{ $app->user_id_aplikasi}}">{{ $app->user_id_aplikasi }}</option>
+                @endforeach
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label> Password </label>
+                <input type="text" value="{{ $forms->pass}}" name="pass" class="form-control" readonly>
+            </div> --}}

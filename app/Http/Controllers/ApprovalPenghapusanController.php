@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Support\ApprovalPenghapusanService;
+use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPenghapusanService;
 use App\Services\Support\RoleUserService;
 use App\Services\Support\UserService;
@@ -49,12 +50,13 @@ class ApprovalPenghapusanController extends Controller
                 ];
                 $storeApprove = ApprovalPenghapusanService::store($data);
 
-                $dataUpdate = [
+                $roleNextApp = [
                     'role_last_app' => $roleUsers->role_id,
                     'role_next_app' => $nextApp,
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
-                $updateStatus = formPenghapusanService::update($dataUpdate, $storeApprove->form_penghapusan_id);
+                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_penghapusan_id);
+                // $updateStatus = formPenghapusanService::update($roleNextApp, $storeApprove->form_penghapusan_id);
 
                 DB::commit();
 
@@ -80,12 +82,13 @@ class ApprovalPenghapusanController extends Controller
                 ];
                 $storeApprove = ApprovalPenghapusanService::store($data);
 
-                $dataUpdate = [
+                $roleNextApp = [
                     'role_last_app' => Auth::user()->role_id,
                     'role_next_app' => 0,
                     'status'=> config('setting_app.status_approval.disapprove'),
                 ];
-                $updateStatus = formPenghapusanService::update($dataUpdate, $storeApprove->form_penghapusan_id);
+                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_penghapusan_id);
+                // $updateStatus = formPenghapusanService::update($roleNextApp, $storeApprove->form_penghapusan_id);
 
                 DB::commit();
 
