@@ -47,7 +47,7 @@
                 @foreach ($owns as $own)
                     <tr>
                         <td>{{ $own->id }}</td>
-                        <td>{{ $own->aplikasi->name }}</td>
+                        <td>{{ $own->nama_aplikasi }}</td>
                         <td>{{ $own->user_id_aplikasi }}</td>
                         <td>{{ $own->pass }}</td>
                     </tr>

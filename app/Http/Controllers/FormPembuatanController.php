@@ -21,6 +21,8 @@ class FormPembuatanController extends Controller
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $apps = AplikasiService::all()->get();
+        // $apps = AplikasiService::whereNotExist()->get();
+
         if($roleUsers->role_id == config('setting_app.role_id.admin')){
             $forms = FormPembuatanService::all()->get();
         }else{
@@ -39,6 +41,7 @@ class FormPembuatanController extends Controller
         try {
             $index = 0;
             foreach ($userStores as $userStore){
+
                 $form = [
                     'created_by'=>Auth::user()->id,
                     'nik' =>Auth::user()->nik,
@@ -50,13 +53,15 @@ class FormPembuatanController extends Controller
                     'type' => 'pembuatan',
                 ];
                 $storeForm = FormHeadService::store($form);
-            }
 
-            foreach ($request->aplikasi_id as $aplikasi_id){
-                $user_id_aplikasi = ($aplikasi_id == config('setting_app.aplikasi_id.vega')) ? $request->id_app[$index] : null;
-                $pass = ($aplikasi_id == config('setting_app.aplikasi_id.vega') or $aplikasi_id == config('setting_app.aplikasi_id.rjserver')) ? $request->pass[$index] : null;
+                foreach ($request->aplikasi_id as $aplikasi_id){
+                    $permission = FormHeadService::permissionCreateForm(Auth::user()->id, $aplikasi_id, $userStore);
+                    if(count($permission->get()) >= 1){
 
-                foreach ($userStores as $userStore){
+                    }else{
+                        $user_id_aplikasi = ($aplikasi_id == config('setting_app.aplikasi_id.vega')) ? $request->id_app[$index] : null;
+                    $pass = ($aplikasi_id == config('setting_app.aplikasi_id.vega') or $aplikasi_id == config('setting_app.aplikasi_id.rjserver')) ? $request->pass[$index] : null;
+
                     $dataApp = [
                         'aplikasi_id' => $aplikasi_id,
                         'form_head_id' => $storeForm->id,
@@ -81,17 +86,18 @@ class FormPembuatanController extends Controller
                         'updated_at' => now(),
                     ];
                     $storelog = FormLogService::store($logForm);
+                    }
                 }
-                $index++;
             }
+            $index++;
 
             DB::commit();
 
             Alert::success('succes', 'form berhasil disimpan');
             return redirect()->route('form_pembuatan.index');
         }catch (\Throwable $th){
-            dd($th);
-            Alert::error('Error!!',);
+            // dd($th);
+            Alert::error('Tidak Bisa Membuat Form', 'ID aplikasi masih dalam proses');
             return redirect()->route('form_pembuatan.index');
         }
     }

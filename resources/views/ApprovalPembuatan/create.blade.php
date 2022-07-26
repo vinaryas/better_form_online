@@ -64,23 +64,12 @@
 
 @stop
 
-     {{-- <div class="col-md-6">
-                <label> Aplikasi </label>
-                <select  name="aplikasi_id[]" class="form-control" readonly>
-                @foreach ($apps as $app)
-                <option value="{{ $app->aplikasi_id }}">{{ $app->aplikasi->name }}</option>
-                @endforeach
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label> ID Aplikasi </label>
-                <select  name="user_id_aplikasi[]" class="form-control" readonly>
-                @foreach ($apps as $app)
-                <option value="{{ $app->user_id_aplikasi}}">{{ $app->user_id_aplikasi }}</option>
-                @endforeach
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label> Password </label>
-                <input type="text" value="{{ $forms->pass}}" name="pass" class="form-control" readonly>
-            </div> --}}
+@section('js')
+    <script>
+        $(document).ready(function () {
+            console.log('teast');
+            $('#table').DataTable();
+        });
+    </script>
+@stop
+

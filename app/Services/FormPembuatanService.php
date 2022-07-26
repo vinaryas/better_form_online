@@ -43,22 +43,22 @@ class FormPembuatanService
         return $this->FormPembuatan->where('created_by', $user_id);
     }
 
-    public function getByUserIdActive($user_id)
-    {
-        return $this->FormPembuatan->where('created_by', $user_id)
-        ->where('status', config('setting_app.status_approval.approve'))
-        ->where('role_next_app', 0);
-    }
+    // public function getByUserIdActive($user_id)
+    // {
+    //     return $this->FormPembuatan->where('created_by', $user_id)
+    //     ->where('status', config('setting_app.status_approval.approve'))
+    //     ->where('role_next_app', 0);
+    // }
 
-    public function getApproveFilter($roleId)
-    {
-        return $this->FormPembuatan->where('role_next_app', $roleId);
-    }
+    // public function getApproveFilter($roleId)
+    // {
+    //     return $this->FormPembuatan->where('role_next_app', $roleId);
+    // }
 
-    public function getApproveFilterByStore($roleId, $storeId)
-    {
-        return $this->FormPembuatan->where('role_next_app', $roleId)->whereIn('store_id', $storeId);
-    }
+    // public function getApproveFilterByStore($roleId, $storeId)
+    // {
+    //     return $this->FormPembuatan->where('role_next_app', $roleId)->whereIn('store_id', $storeId);
+    // }
 
     public function countForm($userId)
     {

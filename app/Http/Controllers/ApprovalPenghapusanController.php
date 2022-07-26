@@ -17,9 +17,9 @@ class ApprovalPenghapusanController extends Controller
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         if(Auth::user()->all_store == 'y'){
-            $forms = formPenghapusanService::getApproveFilter($roleUsers->role_id)->get();
+            $forms = formHeadService::getApprovePenghapusanFilter($roleUsers->role_id)->get();
         }else{
-            $forms = formPenghapusanService::getApproveFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
+            $forms = formHeadService::getApprovePenghapusanFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
         }
 
         return view('ApprovalPenghapusan.index', compact('forms'));
@@ -56,7 +56,6 @@ class ApprovalPenghapusanController extends Controller
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
                 $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_penghapusan_id);
-                // $updateStatus = formPenghapusanService::update($roleNextApp, $storeApprove->form_penghapusan_id);
 
                 DB::commit();
 
@@ -88,7 +87,6 @@ class ApprovalPenghapusanController extends Controller
                     'status'=> config('setting_app.status_approval.disapprove'),
                 ];
                 $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_penghapusan_id);
-                // $updateStatus = formPenghapusanService::update($roleNextApp, $storeApprove->form_penghapusan_id);
 
                 DB::commit();
 

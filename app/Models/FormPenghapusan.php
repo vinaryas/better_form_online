@@ -11,7 +11,7 @@ class FormPenghapusan extends Model
 
     public function user()
     {
-    	return $this->hasOne(User::class, 'id', 'created_by');
+    	return $this->hasOne(User::class, 'id', 'deleted_user');
     }
 
     public function store()

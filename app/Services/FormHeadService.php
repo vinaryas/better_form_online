@@ -39,14 +39,24 @@ class FormHeadService
         return $this->FormHead->query();
     }
 
-    public function getApproveFilter($roleId)
+    public function getApprovePembuatanFilter($roleId)
     {
-        return $this->FormHead->where('role_next_app', $roleId);
+        return $this->FormHead->where('role_next_app', $roleId)->where('type', 'pembuatan');
     }
 
-    public function getApproveFilterByStore($roleId, $storeId)
+    public function getApprovePembuatanFilterByStore($roleId, $storeId)
     {
-        return $this->FormHead->where('role_next_app', $roleId)->whereIn('store_id', $storeId);
+        return $this->FormHead->where('role_next_app', $roleId)->whereIn('store_id', $storeId)->where('type', 'pembuatan');
+    }
+
+    public function getApprovePenghapusanFilter($roleId)
+    {
+        return $this->FormHead->where('role_next_app', $roleId)->where('type', 'pembuatan');
+    }
+
+    public function getApprovePenghapusanFilterByStore($roleId, $storeId)
+    {
+        return $this->FormHead->where('role_next_app', $roleId)->whereIn('store_id', $storeId)->where('type', 'pembuatan');
     }
 
     public function getById($id)
@@ -54,16 +64,41 @@ class FormHeadService
         return $this->FormHead->where('id', $id);
     }
 
-    public function innerJoinFormPembuatan($aplikasi_id, $user_id)
+    public function innerJoinFormPembuatan()
     {
         $data = DB::table('form_head')
         ->join('form_pembuatan', 'form_head.id', '=', 'form_pembuatan.form_head_id')
-        ->select('form_head.status', 'form_pembuatan.aplikasi_id', 'form_pembuatan.created_by',)
-        ->whereNotIn('form_head.status', 2)
-        ->where('form_pembuatan.aplikasi_id', $aplikasi_id)
-        ->where('form_pembuatan.created_by', $user_id);
+        ->join('aplikasi', 'form_pembuatan.aplikasi_id', '=', 'aplikasi.id')
+        ->select(
+            'form_pembuatan.id',
+            'form_pembuatan.created_by',
+            'form_pembuatan.user_id_aplikasi',
+            'form_pembuatan.pass',
+            'form_pembuatan.aplikasi_id',
+            'aplikasi.name as nama_aplikasi',
+            'form_pembuatan.status',
+            'form_head.store_id'
+        );
 
         return $data ;
+    }
+
+    public function getByUserIdActive($user_id)
+    {
+        return $this->innerJoinFormPembuatan()
+        ->where('form_pembuatan.created_by', $user_id)
+        ->where('form_pembuatan.status', config('setting_app.status_approval.finish'))
+        ->where('role_next_app', 0);
+    }
+
+    public function permissionCreateForm($user_id, $aplikasi_id, $store_id)
+    {
+        return $this->innerJoinFormPembuatan()
+        ->where('form_pembuatan.created_by', $user_id)
+        ->where('form_pembuatan.aplikasi_id', $aplikasi_id)
+        ->where('form_pembuatan.store_id', $store_id)
+        ->whereNotIn('form_pembuatan.status', [2, 3]);
+
     }
 
 //     SELECT COUNT(*)

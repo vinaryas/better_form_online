@@ -38,13 +38,13 @@ class FormPenghapusanService
         return $this->FormPenghapusan->where('created_by', $user_id);
     }
 
-    public function getApproveFilter($roleId)
-    {
-        return $this->FormPenghapusan->where('role_next_app', $roleId);
-    }
+    // public function getApproveFilter($roleId)
+    // {
+    //     return $this->FormPenghapusan->where('role_next_app', $roleId);
+    // }
 
-    public function getApproveFilterByStore($roleId, $storeId)
-    {
-        return $this->FormPenghapusan->where('role_next_app', $roleId)->whereIn('store_id', $storeId);
-    }
+    // public function getApproveFilterByStore($roleId, $storeId)
+    // {
+    //     return $this->FormPenghapusan->where('role_next_app', $roleId)->whereIn('store_id', $storeId);
+    // }
 }

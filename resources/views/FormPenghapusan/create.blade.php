@@ -13,15 +13,15 @@
             <input type="hidden" name="user_id" id="user_id" value="{{ $userStores->user_id }}">
             <div class="col-md-6">
                 <label>Nama</label>
-                <input type="text" name="name" id="name" class="form-control" value="{{ $userStores->user->name }}" readonly>
+                <input type="text" name="name" id="name" class="form-control form-control-sm" value="{{ $userStores->user->name }}" readonly>
             </div>
             <div class="col-md-6">
                 <label>NIK</label>
-                <input type="text" id="nik" name="nik" class="form-control" value="{{ $userStores->user->nik }}" readonly>
+                <input type="text" id="nik" name="nik" class="form-control form-control-sm " value="{{ $userStores->user->nik }}" readonly>
             </div>
             <div class="col-md-6">
                 <label>Store</label>
-                <select name="store_id" id="store_id" class="form-control" readonly>
+                <select name="store_id" id="store_id" class="form-control form-control-sm" readonly>
                     <option value="{{ $userStores->store_id }}">{{ $userStores->stores->name }}</option>
                 </select>
             </div>

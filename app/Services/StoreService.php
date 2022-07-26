@@ -33,9 +33,4 @@ class StoreService
         return $this->Store->updateOrCreate($data);
     }
 
-    public function getStoreNonExclusive()
-    {
-        return $this->all()->where('exclusive', 0);
-    }
-
 }

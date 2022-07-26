@@ -26,7 +26,6 @@ class FormPenghapusanController extends Controller
             $forms = FormPenghapusanService::all()->get();
         }else{
             $forms = FormPenghapusanService::getByUserId(Auth::user()->id)->get();
-
         }
 
         return view('formPenghapusan.index', compact('forms', 'userStores'));
@@ -44,18 +43,23 @@ class FormPenghapusanController extends Controller
         DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $nextApp = ApprovalService::getNextApp($roleUsers->role_id, Auth::user()->region_id);
+        $userStores = UserStoreService::getStoreByUserId($request->user_id, UserService::authStoreArray())->get();
 
         try{
             $index = 0;
-            $form = [
-                'created_by' =>  Auth::user()->id,
-                'nik' => Auth::user()->nik,
-                'region_id'=>Auth::user()->region_id,
-                'role_last_app' => $roleUsers->role_id,
-                'role_next_app' => $nextApp,
-                'status' => config('setting_app.status_approval.panding'),
-            ];
-            $storeForm = FormHeadService::store($form);
+            foreach ($userStores as $userStore){
+                $form = [
+                    'created_by'=>Auth::user()->id,
+                    'nik' =>Auth::user()->nik,
+                    'region_id'=>Auth::user()->region_id,
+                    'store_id' => $userStore->store_id,
+                    'role_last_app' => $roleUsers->role_id,
+                    'role_next_app' => $nextApp,
+                    'status' => config('setting_app.status_approval.panding'),
+                    'type' => 'penghapusan',
+                ];
+                $storeForm = FormHeadService::store($form);
+            }
 
             foreach ($request->aplikasi_id as $aplikasi_id){
                 $userStores = UserStoreService::getStoreByUserId($request->user_id, UserService::authStoreArray())->get();
@@ -64,6 +68,7 @@ class FormPenghapusanController extends Controller
                     $dataApp = [
                         'aplikasi_id' => $aplikasi_id,
                         'form_head_id' => $storeForm->id,
+                        'deleted_user' => $request->user_id,
                         'store_id' => $userStore->store_id,
                         'status' => config('setting_app.status_approval.panding'),
                         'created_by' => Auth::user()->id,
@@ -87,6 +92,9 @@ class FormPenghapusanController extends Controller
 
                 $index++;
             }
+
+            $store = ['store_id' => '0'];
+            $updateUserStore = UserStoreService::update($store, $request->user_id, $userStore->store_id);
 
             DB::commit();
 
