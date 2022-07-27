@@ -51,17 +51,22 @@ class FormHeadService
 
     public function getApprovePenghapusanFilter($roleId)
     {
-        return $this->FormHead->where('role_next_app', $roleId)->where('type', 'pembuatan');
+        return $this->FormHead->where('role_next_app', $roleId)->where('type', 'penghapusan');
     }
 
     public function getApprovePenghapusanFilterByStore($roleId, $storeId)
     {
-        return $this->FormHead->where('role_next_app', $roleId)->whereIn('store_id', $storeId)->where('type', 'pembuatan');
+        return $this->FormHead->where('role_next_app', $roleId)->whereIn('store_id', $storeId)->where('type', 'penghapusan');
     }
 
     public function getById($id)
     {
         return $this->FormHead->where('id', $id);
+    }
+
+    public function getByUserId($userId)
+    {
+        return $this->FormHead->where('created_by', $userId);
     }
 
     public function innerJoinFormPembuatan()
@@ -87,7 +92,7 @@ class FormHeadService
     {
         return $this->innerJoinFormPembuatan()
         ->where('form_pembuatan.created_by', $user_id)
-        ->where('form_pembuatan.status', config('setting_app.status_approval.finish'))
+        ->where('form_pembuatan.status', config('setting_app.status_approval.approve'))
         ->where('role_next_app', 0);
     }
 

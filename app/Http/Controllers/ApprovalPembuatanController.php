@@ -24,7 +24,6 @@ class ApprovalPembuatanController extends Controller
             $forms = formHeadService::getApprovePembuatanFilterByStore($roleUsers->role_id, UserService::authStoreArray())->get();
         }
 
-
         return view('ApprovalPembuatan.index', compact('forms'));
     }
 
@@ -60,7 +59,6 @@ class ApprovalPembuatanController extends Controller
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
                 $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_head_id);
-                // $updateroleNextApp = formPembuatanService::update($roleNextApp, $storeApprove->form_pembuatan_id);
 
                 $apps = formPembuatanService::getByFormHeadId($request->form_head_id)->get();
                 foreach($apps as $app){
@@ -104,7 +102,13 @@ class ApprovalPembuatanController extends Controller
                     'status'=> config('setting_app.status_approval.disapprove'),
                 ];
                 $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_pembuatan_id);
-                // $updateStatus = formPembuatanService::update($dataUpdate, $storeApprove->form_pembuatan_id);
+
+                foreach($apps as $app){
+                    $appStatus = [
+                        'status'=> config('setting_app.status_approval.approve'),
+                    ];
+                    $updateroleNextApp = formPembuatanService::update($appStatus, $app->id);
+                }
 
                 DB::commit();
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Support\ApprovalPenghapusanService;
 use App\Services\Support\FormHeadService;
+use App\Services\Support\FormPembuatanService;
 use App\Services\Support\FormPenghapusanService;
 use App\Services\Support\RoleUserService;
 use App\Services\Support\UserService;
@@ -35,6 +36,7 @@ class ApprovalPenghapusanController extends Controller
     	DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $nextApp = ApprovalPenghapusanService::getNextApp($request->aplikasi_id, $roleUsers->role_id, Auth::user()->region_id);
+        $owns = FormHeadService::getByUserIdActive($request->user_id)->get();
 
         if (isset($_POST["approve"]))
         {
@@ -56,6 +58,11 @@ class ApprovalPenghapusanController extends Controller
                     'status'=> config('setting_app.status_approval.approve'),
                 ];
                 $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_penghapusan_id);
+
+                foreach ($owns as $own){
+                    $status = ['status'=>'0'];
+                    $updateStatusId = FormPembuatanService::update($status, $own->id);
+                }
 
                 DB::commit();
 

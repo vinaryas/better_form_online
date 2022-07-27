@@ -12,7 +12,7 @@
         <div class="form-group row">
             <div class="col-md-12">
                 <label>Store</label>
-                <select name="store_id" id="store_id" class="select2 form-control" required>
+                <select name="store_id_tujuan" class="select2 form-control" required>
                     @foreach ($stores as $store)
                     <option value="{{ $store->id }}">{{ $store->name }}</option>
                     @endforeach
@@ -21,6 +21,9 @@
             <div>
                 @foreach ( $apps as $app)
                 <input type="hidden" value="{{ $app->id }}" name="aplikasi_id[]">
+                @endforeach
+                @foreach ( $userStores as $userStore)
+                <input type="hidden" value="{{ $userStore->store_id }}" name="store_id_asal">
                 @endforeach
             </div>
         </div>
@@ -67,11 +70,12 @@
             </thead>
             <tbody>
                 @foreach ($forms as $form)
+                {{-- {{ dd($forms) }} --}}
                     <tr>
                         <td>{{ $form->id }}</td>
                         <td>{{ $form->user->name }}</td>
-                        <td>{{ $form->store1->name }}</td>
-                        <td>{{ $form->store2->name }}</td>
+                        <td>{{ $form->store->name}}</td>
+                        <td>{{ $form->type }}</td>
                     </tr>
                 @endforeach
             </tbody>
