@@ -21,7 +21,7 @@ class FormPenghapusanController extends Controller
 {
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
-        $userStores = UserStoreService::getUserStoreNotAuth(UserService::authStoreArray(), Auth::user()->id)->get();
+        $userStores = UserStoreService::getUserStoreNotAuthActive(UserService::authStoreArray(), Auth::user()->id)->get();
         if($roleUsers->role_id == config('setting_app.role_id.admin')){
             $forms = FormPenghapusanService::all()->get();
         }else{
@@ -93,15 +93,15 @@ class FormPenghapusanController extends Controller
                 $index++;
             }
 
-            $store = ['store_id' => '0'];
-            $updateUserStore = UserStoreService::update($store, $request->user_id, $userStore->store_id);
+            $status = ['status' => '1'];
+            $updateUserStatus = UserService::update($status, $request->user_id);
 
             DB::commit();
 
             Alert::success('succes', 'form berhasil disimpan');
             return redirect()->route('form_penghapusan.index');
         }catch(\Throwable $th){
-            dd($th);
+            // dd($th);
             Alert::error('Error!!',);
             return redirect()->route('form_penghapusan.index');
         }

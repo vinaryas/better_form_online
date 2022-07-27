@@ -134,8 +134,6 @@ class FormPemindahanController extends Controller
                 $updateStatus = FormPembuatanService::update($status, $own->id);
             }
 
-
-
             DB::commit();
 
             Alert::success('succes', 'form berhasil disimpan');

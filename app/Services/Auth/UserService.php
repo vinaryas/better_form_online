@@ -95,4 +95,9 @@ class UserService
         return $this->User->updateOrCreate($data);
     }
 
+    public function update($data, $id)
+    {
+        return $this->User->where('id', $id)->update($data);
+    }
+
 }

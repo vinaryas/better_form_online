@@ -21,7 +21,6 @@ class FormPembuatanController extends Controller
     public function index(){
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
         $apps = AplikasiService::all()->get();
-        // $apps = AplikasiService::whereNotExist()->get();
 
         if($roleUsers->role_id == config('setting_app.role_id.admin')){
             $forms = FormPembuatanService::all()->get();
@@ -41,7 +40,6 @@ class FormPembuatanController extends Controller
         try {
             $index = 0;
             foreach ($userStores as $userStore){
-
                 $form = [
                     'created_by'=>Auth::user()->id,
                     'nik' =>Auth::user()->nik,
@@ -55,8 +53,11 @@ class FormPembuatanController extends Controller
                 $storeForm = FormHeadService::store($form);
 
                 foreach ($request->aplikasi_id as $aplikasi_id){
-                    $permission = FormHeadService::permissionCreateForm(Auth::user()->id, $aplikasi_id, $userStore);
+                    $permission = FormHeadService::permissionCreateForm(Auth::user()->id, $aplikasi_id, $userStore->store_id);
                     if(count($permission->get()) >= 1){
+
+                        Alert::error('Tidak Bisa Membuat Form', 'ID aplikasi masih dalam proses');
+                        return redirect()->route('form_pembuatan.index');
 
                     }else{
                         $user_id_aplikasi = ($aplikasi_id == config('setting_app.aplikasi_id.vega')) ? $request->id_app[$index] : null;
@@ -97,7 +98,7 @@ class FormPembuatanController extends Controller
             return redirect()->route('form_pembuatan.index');
         }catch (\Throwable $th){
             // dd($th);
-            Alert::error('Tidak Bisa Membuat Form', 'ID aplikasi masih dalam proses');
+            Alert::error('ERROR !!!!');
             return redirect()->route('form_pembuatan.index');
         }
     }

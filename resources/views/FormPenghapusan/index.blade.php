@@ -22,9 +22,9 @@
                 <tbody>
                     @foreach ($userStores as $userStore)
                         <tr>
-                            <td>{{ $userStore->user->name }}</td>
-                            <td>{{ $userStore->user->nik }}</td>
-                            <td>{{ $userStore->stores->name }}</td>
+                            <td>{{ $userStore->user_name }}</td>
+                            <td>{{ $userStore->nik }}</td>
+                            <td>{{ $userStore->store_name }}</td>
                             <td> <a href="{{ route('form_penghapusan.create', $userStore->id) }}" class="btn btn-info">
                                 <i class="fas fa-file"></i> Buat Form </a>
                             </td>

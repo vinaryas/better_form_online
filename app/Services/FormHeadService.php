@@ -75,9 +75,9 @@ class FormHeadService
             'form_pembuatan.user_id_aplikasi',
             'form_pembuatan.pass',
             'form_pembuatan.aplikasi_id',
-            'aplikasi.name as nama_aplikasi',
+            'form_pembuatan.store_id',
             'form_pembuatan.status',
-            'form_head.store_id'
+            'aplikasi.name as nama_aplikasi',
         );
 
         return $data ;
@@ -97,11 +97,10 @@ class FormHeadService
         ->where('form_pembuatan.created_by', $user_id)
         ->where('form_pembuatan.aplikasi_id', $aplikasi_id)
         ->where('form_pembuatan.store_id', $store_id)
-        ->whereNotIn('form_pembuatan.status', [2, 3]);
-
+        ->whereNotIn('form_pembuatan.status', [2,3]);
     }
 
-//     SELECT COUNT(*)
+// SELECT COUNT(*)
 // FROM `form_head` a
 // inner join form_pembuatan b on a.id = b.form_head_id
 // where b.status not in(2, 3)
