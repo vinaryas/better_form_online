@@ -6,6 +6,7 @@ use App\Services\Support\ApprovalPembuatanService;
 use App\Services\Support\ApprovalService;
 use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPembuatanService;
+use App\Services\Support\MM_SoftService;
 use App\Services\Support\RoleUserService;
 use App\Services\Support\UserService;
 use App\Services\Support\UserStoreService;
@@ -53,20 +54,32 @@ class ApprovalPembuatanController extends Controller
                 ];
                 $storeApprove = approvalService::store($data);
 
-                $roleNextApp = [
-                    'role_last_app' => $roleUsers->role_id,
-                    'role_next_app' => $nextApp,
-                    'status'=> config('setting_app.status_approval.approve'),
-                ];
-                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_head_id);
-
                 $apps = formPembuatanService::getByFormHeadId($request->form_head_id)->get();
                 foreach($apps as $app){
                     $appStatus = [
                         'status'=> config('setting_app.status_approval.approve'),
                     ];
                     $updateroleNextApp = formPembuatanService::update($appStatus, $app->id);
+
+                    if($app->aplikasi_id == config('setting_app.aplikasi_id.rjserver')){
+                        $rjServer = [
+                            'cashnum' => substr($request->nik, 3),
+                            'nama' => $request->name,
+                            'password' => $app->pass,
+                            'roles' => $request->role_last_app,
+                            'store' => $app->store_id,
+                            'status' => 'A',
+                        ];
+                        $storerjServer = MM_SoftService::store($rjServer);
+                    }
                 }
+
+                $roleNextApp = [
+                    'role_last_app' => $roleUsers->role_id,
+                    'role_next_app' => $nextApp,
+                    'status'=> config('setting_app.status_approval.approve'),
+                ];
+                $updateStatus = FormHeadService::update($roleNextApp, $storeApprove->form_head_id);
 
                 $storeUser = [
                     'store_id' => $request->store_id,
