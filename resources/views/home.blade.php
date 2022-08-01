@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="card-body">
-    @if ($roleUsers->role_id == config('setting_app.role_id.aux'))
+    @if ($roleUsers->role_id == config('setting_app.role_id.aux') || config('setting_app.role_id.it'))
     <div class="row">
         <div class="col-lg-12 col-6">
             <a href="{{ route('approval_pembuatan.index') }}">
