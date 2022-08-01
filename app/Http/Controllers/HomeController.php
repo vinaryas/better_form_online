@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\Support\ApprovalPembuatanService;
 use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPembuatanService;
+use App\Services\Support\RoleUserService;
+use App\Services\Support\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,22 +30,20 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
+
         $countApproval = 0;
         $countForm = 0;
-        $countApproved = 0;
-        $countDisapproved = 0;
+        $countActive = 0;
+        $countInactive = 0;
         $thisMonth = Carbon::now()->month;
 
-        $countApproval = FormPembuatanService::countForm(Auth::user()->id, $thisMonth)->get()->count();
+        $countApprovalPembuatan = FormHeadService::getApprovePembuatanFilterByStore($roleUsers->role_id, UserService::authStoreArray(), $thisMonth)->get()->count();
+        $countApprovalPenghapusan = FormHeadService::getApprovePenghapusanFilterByStore($roleUsers->role_id, UserService::authStoreArray(), $thisMonth)->get()->count();
         $countForm = FormHeadService::countForm(Auth::user()->id, $thisMonth)->get()->count();
-        $countApprovedPembuatan = ApprovalPembuatanService::countApproved(Auth::user()->id, $thisMonth)->get()->count();
-        $countDisapprovedPembuatan = ApprovalPembuatanService::countDisapproved(Auth::user()->id, $thisMonth)->get()->count();
-        $countApprovedPenghapusan = ApprovalPembuatanService::countApproved(Auth::user()->id, $thisMonth)->get()->count();
-        $countDisapprovedPenghapusan = ApprovalPembuatanService::countDisapproved(Auth::user()->id, $thisMonth)->get()->count();
+        $countActive = FormHeadService::getByUserIdActive(Auth::user()->id, $thisMonth)->get()->count();
+        $countInactive = FormHeadService::getByUserIdInctive(Auth::user()->id, $thisMonth)->get()->count();
 
-        $countApproved =  $countApprovedPembuatan + $countApprovedPenghapusan;
-        $countDisapproved = $countDisapprovedPembuatan + $countDisapprovedPenghapusan;
-
-        return view('home', compact('countApproval', 'countForm', 'countApproved', 'countDisapproved'));
+        return view('home', compact('countApprovalPembuatan', 'countApprovalPenghapusan', 'countForm', 'countActive', 'countInactive', 'roleUsers'));
     }
 }

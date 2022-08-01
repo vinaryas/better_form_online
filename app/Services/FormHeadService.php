@@ -34,11 +34,6 @@ class FormHeadService
         return $this->FormHead->where('created_by', $userId);
     }
 
-    public function countAdmin()
-    {
-        return $this->FormHead->query();
-    }
-
     public function getApprovePembuatanFilter($roleId)
     {
         return $this->FormHead->where('role_next_app', $roleId)->where('type', 'pembuatan');
@@ -96,6 +91,14 @@ class FormHeadService
         ->where('role_next_app', 0);
     }
 
+    public function getByUserIdInctive($user_id)
+    {
+        return $this->innerJoinFormPembuatan()
+        ->where('form_pembuatan.created_by', $user_id)
+        ->where('form_pembuatan.status', config('setting_app.status_approval.panding'))
+        ->where('role_next_app', 0);
+    }
+
     public function permissionCreateForm($user_id, $aplikasi_id, $store_id)
     {
         return $this->innerJoinFormPembuatan()
@@ -104,13 +107,6 @@ class FormHeadService
         ->where('form_pembuatan.store_id', $store_id)
         ->whereNotIn('form_pembuatan.status', [2,3]);
     }
-
-// SELECT COUNT(*)
-// FROM `form_head` a
-// inner join form_pembuatan b on a.id = b.form_head_id
-// where b.status not in(2, 3)
-// and b.aplikasi_id = 1
-// and a.created_by = 6;
 }
 
 

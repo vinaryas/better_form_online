@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Support\ApprovalPenghapusanService;
+use App\Services\Support\ApprovalService;
 use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPembuatanService;
 use App\Services\Support\FormPenghapusanService;
@@ -35,7 +36,7 @@ class ApprovalPenghapusanController extends Controller
     public function approve(Request $request){
     	DB::beginTransaction();
         $roleUsers = RoleUserService::getRoleFromUserId(Auth::user()->id)->first();
-        $nextApp = ApprovalPenghapusanService::getNextApp($request->aplikasi_id, $roleUsers->role_id, Auth::user()->region_id);
+        $nextApp = ApprovalService::getNextApp($roleUsers->role_id, Auth::user()->region_id);
         $owns = FormHeadService::getByUserIdActive($request->user_id)->get();
 
         if (isset($_POST["approve"]))

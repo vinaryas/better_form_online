@@ -15,7 +15,6 @@ class CreateFormPemindahanTable extends Migration
     {
         Schema::create('form_pemindahan', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('form_head_id');
             $table->integer('created_by');
             $table->integer('nik');
             $table->integer('region_id');

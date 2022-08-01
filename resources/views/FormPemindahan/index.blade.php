@@ -70,12 +70,11 @@
             </thead>
             <tbody>
                 @foreach ($forms as $form)
-                {{-- {{ dd($forms) }} --}}
                     <tr>
                         <td>{{ $form->id }}</td>
                         <td>{{ $form->user->name }}</td>
-                        <td>{{ $form->store->name}}</td>
-                        <td>{{ $form->type }}</td>
+                        <td>{{ $form->store1->name}}</td>
+                        <td>{{ $form->store2->name}}</td>
                     </tr>
                 @endforeach
             </tbody>
