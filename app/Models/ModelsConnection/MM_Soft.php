@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ModelsConnection;
 
 use Illuminate\Database\Eloquent\Model;
 
 class MM_Soft extends Model
 {
-    protected $table = 'MM_Soft';
+    protected $connection = 'mysql2';
+    protected $table = 'cashier';
     protected $guarded = [];
 
     const UPDATED_AT = null;

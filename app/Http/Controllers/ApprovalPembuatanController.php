@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Support\ApprovalPembuatanService;
 use App\Services\Support\ApprovalService;
+use App\Services\Support\FirstTimeSyncService;
 use App\Services\Support\FormHeadService;
 use App\Services\Support\FormPembuatanService;
 use App\Services\Support\MM_SoftService;
@@ -69,8 +70,12 @@ class ApprovalPembuatanController extends Controller
                             'roles' => $request->role_last_app,
                             'store' => $app->store_id,
                             'status' => 'A',
+                            'acc' => 2,
                         ];
                         $storerjServer = MM_SoftService::store($rjServer);
+
+                        $statusFirstTimeSync = ['status' => 1];
+                        $updateFirsttimeSync = FirstTimeSyncService::update($statusFirstTimeSync, $app->store_id);
                     }
                 }
 
